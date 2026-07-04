@@ -1,0 +1,101 @@
+# ===========================
+# Dependencies
+# ===========================
+node_modules/
+
+# ===========================
+# Build Output
+# ===========================
+dist/
+dist-ssr/
+build/
+.next/
+out/
+
+# ===========================
+# Environment Variables
+# ===========================
+.env
+.env.*
+!.env.example
+
+# ===========================
+# Logs
+# ===========================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ===========================
+# Vite Cache
+# ===========================
+.vite/
+
+# ===========================
+# macOS
+# ===========================
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ===========================
+# VS Code
+# ===========================
+.vscode/*
+!.vscode/extensions.json
+
+# ===========================
+# JetBrains IDEs
+# ===========================
+.idea/
+
+# ===========================
+# Visual Studio
+# ===========================
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ===========================
+# Temporary Files
+# ===========================
+*.swp
+*.swo
+*~
+
+# ===========================
+# Local AI Config
+# ===========================
+.claude/
+
+# ===========================
+# Media Files (Large)
+# ===========================
+public/videos/
+public/**/*.mp4
+public/**/*.mov
+public/**/*.avi
+public/**/*.mkv
+public/**/*.webm
+
+# ===========================
+# Coverage
+# ===========================
+coverage/
+
+# ===========================
+# Cache
+# ===========================
+.cache/
+.eslintcache
+
+# ===========================
+# Package Managers
+# ===========================
+.pnpm-store/
+.yarn/
