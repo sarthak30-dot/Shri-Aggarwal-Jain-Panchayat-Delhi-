@@ -23,19 +23,22 @@ export default function TempleDetailPage() {
   const nextTemple = temples[currentIdx + 1] || null;
 
   return (
-    <div style={{ paddingTop: '90px', minHeight: '100vh' }}>
+    <div style={{ minHeight: '100vh' }}>
 
       {/* Hero banner */}
-      <div style={{ position: 'relative', height: '420px', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', overflow: 'hidden', backgroundColor: 'hsl(var(--charcoal))', maxHeight: '85vh' }}>
+        {/* Full-width, uncropped image — height follows the image's own aspect ratio */}
         <img
           src={temple.detailHeroImage || temple.image}
           alt={temple.detailHeroImage ? `${temple.name} — Bhagwaan darshan` : temple.name}
           style={{
+            display: 'block',
             width: '100%',
-            height: '100%',
+            height: 'auto',
+            maxHeight: '85vh',
             objectFit: 'cover',
-            objectPosition: temple.detailHeroPosition || 'center center',
-            filter: temple.detailHeroImage ? 'brightness(0.65)' : 'brightness(0.55)',
+            objectPosition: temple.detailHeroPosition || 'center top',
+            filter: temple.detailHeroImage ? 'brightness(0.75)' : 'brightness(0.7)',
           }}
         />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(23,27,33,0.9) 0%, rgba(23,27,33,0.1) 55%)' }} />

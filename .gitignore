@@ -99,3 +99,7 @@ coverage/
 # ===========================
 .pnpm-store/
 .yarn/
+
+
+.playwright-mcp
+claude.md

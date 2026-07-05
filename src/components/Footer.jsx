@@ -36,6 +36,7 @@ const Footer = () => (
               { label: 'All 12 Temples', to: '/temples' },
               { label: 'Birds Hospital', to: '/birds-hospital' },
               { label: 'Dharamshalas', to: '/dharamshala' },
+              { label: 'Library', to: '/library' },
               { label: 'Schools', to: '/schools' },
             ].map((l) => (
               <Link

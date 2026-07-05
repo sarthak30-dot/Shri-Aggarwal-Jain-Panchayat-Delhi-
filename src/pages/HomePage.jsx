@@ -1,15 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
+import AboutSection from '../components/AboutSection';
 import TempleCard from '../components/TempleCard';
 import { temples } from '../data/temples';
 import imgBirdsHospital from '../assets/birds_hospital_web.jpg';
-
-const values = [
-  { name: 'Ahimsa (अहिंसा)', meaning: 'Non-violence in thoughts, words, and deeds.' },
-  { name: 'Satya (सत्य)', meaning: 'Truthfulness and absolute honesty.' },
-  { name: 'Aparigraha (अपरिग्रह)', meaning: 'Non-possessiveness, limiting material desires.' },
-];
 
 const SectionHeader = ({ eyebrow, title, subtitle }) => (
   <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
@@ -46,27 +41,8 @@ export default function HomePage() {
     <>
       <Hero />
 
-      {/* ── Jain Values (stays on home as spiritual anchor) ── */}
-      <section style={{ padding: '6rem 0', backgroundColor: '#FAF5EF', borderBottom: '1px solid rgba(184,134,11,0.12)' }}>
-        <div className="container-heritage">
-          <SectionHeader
-            eyebrow="Our Foundation"
-            title="Core Philosophy of Ahimsa"
-            subtitle="The Shri Digambar Jain Panchayat preserves centuries of unbroken devotion, rooted in the foundational pillars of Jain ethics."
-          />
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.75rem' }}>
-            {values.map((v, idx) => (
-              <div key={idx} className="heritage-card" style={{ padding: '2.25rem 2rem', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(255,127,36,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.15rem', color: 'hsl(var(--saffron))' }}>
-                  卐
-                </div>
-                <h3 style={{ fontSize: '1.1rem', color: 'hsl(var(--charcoal))' }}>{v.name}</h3>
-                <p style={{ fontSize: '0.875rem', color: '#555', lineHeight: 1.6 }}>{v.meaning}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── About the Panchayat ── */}
+      <AboutSection />
 
       {/* ── Featured Temples Glimpse ── */}
       <section style={{ padding: '6rem 0', backgroundColor: '#fff' }}>
@@ -129,7 +105,7 @@ export default function HomePage() {
             title="Beyond the Temples"
             subtitle="The Panchayat runs a network of rest houses, libraries, ashrams, and schools — serving pilgrims and community for over a century."
           />
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }} className="hospital-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2rem' }}>
 
             {/* Dharamshala card */}
             <div className="heritage-card" style={{ padding: '2.5rem 2.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -140,6 +116,18 @@ export default function HomePage() {
               </p>
               <Link to="/dharamshala" style={{ fontSize: '0.82rem', fontWeight: 600, color: 'hsl(var(--saffron))', textDecoration: 'none', letterSpacing: '0.05em', marginTop: 'auto' }}>
                 View all rest houses →
+              </Link>
+            </div>
+
+            {/* Library card */}
+            <div className="heritage-card" style={{ padding: '2.5rem 2.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ fontSize: '2rem' }}>📜</div>
+              <h3 style={{ fontSize: '1.3rem', color: 'hsl(var(--charcoal))' }}>Sahitya Sadhan Library</h3>
+              <p style={{ fontSize: '0.9rem', color: '#555', lineHeight: 1.65 }}>
+                A repository of rare Jain manuscripts, scriptures, and scholarly texts — open to researchers and devotees seeking spiritual study.
+              </p>
+              <Link to="/library" style={{ fontSize: '0.82rem', fontWeight: 600, color: 'hsl(var(--saffron))', textDecoration: 'none', letterSpacing: '0.05em', marginTop: 'auto' }}>
+                Visit the library →
               </Link>
             </div>
 

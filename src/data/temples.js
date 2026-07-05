@@ -28,7 +28,7 @@ export const temples = [
     featured: true,
     image: imgLalMandir,
     detailHeroImage: imgLalMandirJhanki,
-    detailHeroPosition: 'center 40%',
+    detailHeroPosition: 'center top',
     images: lalMandirGallery,
     videos: [
       { src: '/videos/lal-mandir-1.mp4', title: 'Lal Mandir — Darshan' },

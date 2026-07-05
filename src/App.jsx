@@ -9,8 +9,10 @@ import TemplesPage       from './pages/TemplesPage';
 import TempleDetailPage  from './pages/TempleDetailPage';
 import BirdsHospitalPage from './pages/BirdsHospitalPage';
 import DharamshaalaPage  from './pages/DharamshaalaPage';
+import LibraryPage       from './pages/LibraryPage';
 import SchoolsPage       from './pages/SchoolsPage';
 import DonatePage        from './pages/DonatePage';
+import NotFoundPage      from './pages/NotFoundPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -30,8 +32,10 @@ export default function App() {
           <Route path="/temples/:slug"      element={<TempleDetailPage />} />
           <Route path="/birds-hospital"     element={<BirdsHospitalPage />} />
           <Route path="/dharamshala"        element={<DharamshaalaPage />} />
+          <Route path="/library"            element={<LibraryPage />} />
           <Route path="/schools"            element={<SchoolsPage />} />
           <Route path="/donate"             element={<DonatePage />} />
+          <Route path="*"                   element={<NotFoundPage />} />
         </Routes>
       </main>
       <Footer />

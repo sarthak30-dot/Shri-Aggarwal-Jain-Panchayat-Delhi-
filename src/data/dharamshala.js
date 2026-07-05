@@ -1,8 +1,3 @@
-import imgSahityaSadhan from '../assets/library_sahitya_sadhan_web.jpg';
-
-const libraryGalleryFiles = import.meta.glob('../assets/gallery/library/*.jpg', { eager: true, import: 'default' });
-const libraryGallery = Object.keys(libraryGalleryFiles).sort().map((key) => libraryGalleryFiles[key]);
-
 export const dharamshalaPlaces = [
   {
     id: 'jain-bhavan-delhi',
@@ -23,18 +18,6 @@ export const dharamshalaPlaces = [
     desc: 'Located near the revered Shri Mahaveerji temple complex in Rajasthan — one of the most important Digambara Jain pilgrimage destinations — this Jain Bhavan provides comfortable and affordable accommodation for pilgrims travelling from Delhi for darshan.',
     facilities: ['Pilgrim rooms', 'Dharamshala-style lodging', 'Proximity to main temple', 'Paryushana special arrangements'],
     contact: 'Contact Panchayat Office for bookings',
-  },
-  {
-    id: 'sahitya-sadhan',
-    name: 'Sahitya Sadhan (Library)',
-    nameHindi: 'साहित्य साधन (पुस्तकालय)',
-    location: 'Old Delhi',
-    image: imgSahityaSadhan,
-    images: libraryGallery,
-    tagline: 'Preserving knowledge, one manuscript at a time.',
-    desc: 'Sahitya Sadhan is the literary and archival arm of the Panchayat — a repository of Jain manuscripts, scriptures, and scholarly texts accumulated over centuries. The library holds rare palm-leaf manuscripts, printed texts on Jain cosmology, philosophy, and history, and is open to researchers and devotees seeking spiritual study.',
-    facilities: ['Ancient manuscript collection', 'Reference library', 'Open to researchers', 'Jain philosophy & cosmology texts'],
-    contact: 'Open during Panchayat office hours',
   },
   {
     id: 'udaseen-ashram',
