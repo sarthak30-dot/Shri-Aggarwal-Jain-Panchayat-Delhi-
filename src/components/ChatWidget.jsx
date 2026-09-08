@@ -7,8 +7,12 @@ import {
   templeCount,
 } from '../lib/chatbotKnowledge';
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+// Groq — OpenAI-compatible chat completions API. openai/gpt-oss-120b is
+// Groq's own recommended replacement for the now-deprecated
+// llama-3.3-70b-versatile (deprecated for free/developer-tier use, June 2026).
+const API_KEY = import.meta.env.VITE_GROQ_API_KEY;
+const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const MODEL = 'openai/gpt-oss-120b';
 
 const SYSTEM_PROMPT = `
 You are Veer (वीर), the official digital guide for the Shri Digambar Jain Panchayat, Old Delhi — the governing body of ${templeCount} historic temples, the world-famous Jain Charitable Birds Hospital, and multiple charitable institutions in the walled city of Shahjahanabad.
@@ -176,24 +180,34 @@ export default function ChatWidget() {
     setLoading(true);
 
     try {
-      const contents = updatedMessages.map((m) => ({
-        role: m.role === 'user' ? 'user' : 'model',
-        parts: [{ text: m.text }],
-      }));
+      // Internal message state keeps 'user'/'model' roles (unchanged, so the
+      // chat-bubble--model styling below still applies) — only the outgoing
+      // request maps to OpenAI-compatible 'user'/'assistant'.
+      const chatMessages = [
+        { role: 'system', content: SYSTEM_PROMPT },
+        ...updatedMessages.map((m) => ({
+          role: m.role === 'user' ? 'user' : 'assistant',
+          content: m.text,
+        })),
+      ];
 
       const res = await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${API_KEY}`,
+        },
         body: JSON.stringify({
-          contents,
-          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          generationConfig: { temperature: 0.65, maxOutputTokens: 600 },
+          model: MODEL,
+          messages: chatMessages,
+          temperature: 0.65,
+          max_completion_tokens: 600,
         }),
       });
 
       const data = await res.json();
       const reply =
-        data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+        data?.choices?.[0]?.message?.content ||
         'I could not process that. Please try again.';
 
       setMessages((prev) => [...prev, { role: 'model', text: reply }]);
@@ -247,7 +261,7 @@ export default function ChatWidget() {
                 Jai Jinendra 🙏
               </p>
               <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: 1.5, marginBottom: '1.25rem' }}>
-                Ask me anything about the 14 temples, the Birds Hospital, or Jain philosophy — in any language.
+                Ask me anything about the {templeCount} temples, the Birds Hospital, or Jain philosophy — in any language.
               </p>
               <div className="chat-suggestions">
                 {SUGGESTIONS.map((q) => (

@@ -103,3 +103,4 @@ coverage/
 
 .playwright-mcp
 claude.md
+.vercel
