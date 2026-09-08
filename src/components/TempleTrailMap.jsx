@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { temples } from '../data/temples';
+import { TEMPLE_SHORT_NAME as SHORT_NAME } from '../lib/chatbotKnowledge';
 
 // The 9 temples inside/at the edge of Shahjahanabad's walls form a genuine
 // walkable trail. The remaining 3 (Raja Bazaar, Sabzi Mandi, Patparganj) are
@@ -23,24 +24,6 @@ const TRAIL_ORDER = [
 const byslug = Object.fromEntries(temples.map((t) => [t.slug, t]));
 const trailTemples = TRAIL_ORDER.map((slug) => byslug[slug]).filter(Boolean);
 const beyondTemples = temples.filter((t) => !TRAIL_ORDER.includes(t.slug));
-
-// Curated short labels for the compact itinerary chips — the full formal
-// names ("Shree Agrawal Digambar Jain Panchayati Mandir") don't fit, and a
-// regex strip is too fragile across the different naming patterns in use.
-const SHORT_NAME = {
-  'mori-gate-mandir': 'Mori Gate Mandir',
-  'lal-mandir': 'Lal Mandir',
-  'kucha-seth-bada-mandir': 'Bada Mandir',
-  'kucha-seth-chhota-mandir': 'Chhota Mandir',
-  'naya-mandir': 'Naya Mandir',
-  'panchayati-mandir': 'Panchayati Mandir',
-  'meru-jain-mandir': 'Meru Mandir',
-  'sitaram-bazaar-mandir': 'Sitaram Bazaar Mandir',
-  'delhi-gate-mandir': 'Delhi Gate Mandir',
-  'raja-bazaar-mandir': 'Raja Bazaar Mandir',
-  'sabzi-mandi-baraf-khana-mandir': 'Sabzi Mandi Mandir',
-  'patparganj-mandir': 'Patparganj Mandir',
-};
 
 // ── Distance & walk-time between consecutive trail stops ──
 // Straight-line (haversine) distance, then scaled up by LANE_FACTOR: Old

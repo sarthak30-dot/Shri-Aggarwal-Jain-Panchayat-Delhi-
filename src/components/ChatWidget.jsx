@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   buildTempleKnowledge,
   buildDharamshalaKnowledge,
   buildSchoolsKnowledge,
   buildLibraryKnowledge,
   templeCount,
+  templeLinkEntries,
 } from '../lib/chatbotKnowledge';
 
 // Groq — OpenAI-compatible chat completions API. openai/gpt-oss-120b is
@@ -15,29 +17,33 @@ const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL = 'openai/gpt-oss-120b';
 
 const SYSTEM_PROMPT = `
-You are Veer (वीर), the official digital guide for the Shri Digambar Jain Panchayat, Old Delhi — the governing body of ${templeCount} historic temples, the world-famous Jain Charitable Birds Hospital, and multiple charitable institutions in the walled city of Shahjahanabad.
+You are Veer (वीर), the official digital guide for the Shri Digambar Jain Panchayat, Old Delhi — representing all ${templeCount} historic temples on this site, the world-famous Jain Charitable Birds Hospital, and its dharamshalas, schools, and library.
 
-YOUR PERSONALITY:
-- Warm, respectful, and spiritually grounded
-- Knowledgeable about both history and faith
+TONE:
+- Serene, highly respectful, culturally sensitive, and welcoming
 - Use "Jai Jinendra 🙏" as a greeting
 - Respond in the SAME LANGUAGE the user writes in — Hindi, Gujarati, English, Marwari, or any other language
-- Keep responses concise: 2-4 sentences for simple questions, more detail for complex ones
-- If you don't know exact timings or contact numbers, honestly say so and suggest calling the Panchayat office
 
-WHAT YOU HELP WITH:
-- All 12 temples: history, significance, visiting information
-- Jain Charitable Birds Hospital
-- Jain philosophy, principles, festivals, and tirthankaras
-- Dharamshalas and accommodation
-- Schools and educational institutions
-- The Sahitya Sadhan library and its manuscript collection
-- Donations and seva opportunities
+FORMAT:
+- Short, crisp, directly to the point — no overly long paragraphs
+- Maximum 2-3 sentences per response, unless listing temple timings or step-by-step visiting information
+- If you don't know exact timings or contact numbers, say so honestly and suggest calling the Panchayat office — never invent them
 
-DO NOT:
-- Discuss politics or controversy
-- Speak negatively about any religion
-- Make up phone numbers, timings, or addresses you are not sure of
+GUIDING PHILOSOPHY (uphold these in how you respond, not only what you say):
+- Ahimsa (non-violence) — in thought, word, and deed
+- Anekantavada (many-sidedness of truth) — acknowledge other perspectives respectfully rather than asserting one view as the only one
+- Aparigraha (non-attachment) — no self-promotion, no persona beyond Veer
+
+KNOWLEDGE BASE:
+1. Ground every answer FIRST in the temple, hospital, dharamshala, school, and library data below
+2. For general Jainism questions, provide verified information on the 24 Tirthankaras, Jain Agamas, and Jain history
+
+STRICT GUARDRAILS — these override everything else:
+- You are strictly limited to Jainism, Jain philosophy, and the temples/institutions described below
+- If asked about politics, other religions, coding, general trivia, personal advice, or ANY topic outside Jainism and this Panchayat, you MUST refuse
+- Rejection phrase: reply with EXACTLY "I cannot help you with this one." and nothing else — no explanation, no softening, no elaboration
+- Never generate jokes, engage in debates, or adopt any persona other than Veer
+- If a user is abusive or disrespectful, end the conversation politely but firmly rather than continuing to engage on that message
 
 ═══════════════════════════════════
 THE ${templeCount} TEMPLES — COMPLETE KNOWLEDGE
@@ -153,6 +159,62 @@ const SUGGESTIONS = [
   'Explain Ahimsa',
 ];
 
+const FOLLOWUPS = [
+  { key: 'another', label: 'Ask about another temple', prompt: 'Tell me about a different temple I haven’t asked about yet.' },
+  { key: 'visit', label: '🙏 Visiting info', prompt: 'What should I know before visiting?' },
+];
+
+// gpt-oss (via Groq) occasionally emits typographic Unicode space variants
+// instead of a plain space (U+0020) — U+202F narrow-no-break-space showed up
+// mid-name in testing, visually identical to a normal space but a different
+// code point. That silently defeats exact-string matching against
+// templeLinkEntries, so every space-like character is normalized to a plain
+// space before matching. Written as explicit \u escapes (not literal
+// characters) so the pattern itself stays legible and unambiguous.
+const SPACE_VARIANTS_RE = /[\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000]/g;
+const normalizeSpaces = (text) => text.replace(SPACE_VARIANTS_RE, ' ');
+
+// Turns every known temple name (full or short form) into a link to that
+// temple's real page — built once at module load since templeLinkEntries is
+// static, not per-render state.
+const TEMPLE_LINK_PATTERN = templeLinkEntries.length
+  ? new RegExp(`(${templeLinkEntries.map((e) => e.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g')
+  : null;
+const TEMPLE_LINK_SLUG_BY_TEXT = new Map(templeLinkEntries.map((e) => [e.text, e.slug]));
+
+function linkifyTempleNames(text, keyPrefix) {
+  if (!TEMPLE_LINK_PATTERN) return text;
+  return text.split(TEMPLE_LINK_PATTERN).map((part, k) => {
+    const slug = TEMPLE_LINK_SLUG_BY_TEXT.get(part);
+    return slug ? (
+      <Link key={`${keyPrefix}-${k}`} to={`/temples/${slug}`} className="chat-temple-link">
+        {part}
+      </Link>
+    ) : (
+      part
+    );
+  });
+}
+
+// Renders **bold** markdown spans as actual bold — Groq/gpt-oss reaches for
+// markdown unprompted, and raw asterisks read as broken. Splitting on a
+// pattern with one capture group alternates [plain, bold, plain, bold, ...],
+// and each piece (including the text *inside* a bold span, since headings
+// like "**Shri ... Naya Mandir**" wrap a temple name) still gets run through
+// the temple linkifier — a flat single-pass regex can't do this correctly,
+// since the bold delimiter would otherwise greedily consume the temple name
+// before the link pattern ever gets a chance to match it.
+function linkifyLine(line, keyPrefix) {
+  const normalized = normalizeSpaces(line);
+  return normalized.split(/\*\*([^*]+)\*\*/g).map((segment, i) =>
+    i % 2 === 1 ? (
+      <strong key={`${keyPrefix}-b${i}`}>{linkifyTempleNames(segment, `${keyPrefix}-b${i}`)}</strong>
+    ) : (
+      linkifyTempleNames(segment, `${keyPrefix}-p${i}`)
+    ),
+  );
+}
+
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -169,20 +231,28 @@ export default function ChatWidget() {
     if (open && messages.length === 0) inputRef.current?.focus();
   }, [open]);
 
+  // Replaces the trailing message (the streaming placeholder) with new state.
+  const patchLastMessage = (patch) => {
+    setMessages((prev) => {
+      const next = [...prev];
+      next[next.length - 1] = { ...next[next.length - 1], ...patch };
+      return next;
+    });
+  };
+
   const sendMessage = async (text) => {
     const trimmed = text.trim();
     if (!trimmed || loading) return;
 
     const userMsg = { role: 'user', text: trimmed };
     const updatedMessages = [...messages, userMsg];
-    setMessages(updatedMessages);
+    // Placeholder model bubble: shows the typing dots until the first token
+    // of the streamed reply arrives, then grows in place as text streams in.
+    setMessages([...updatedMessages, { role: 'model', text: '', streaming: true }]);
     setInput('');
     setLoading(true);
 
     try {
-      // Internal message state keeps 'user'/'model' roles (unchanged, so the
-      // chat-bubble--model styling below still applies) — only the outgoing
-      // request maps to OpenAI-compatible 'user'/'assistant'.
       const chatMessages = [
         { role: 'system', content: SYSTEM_PROMPT },
         ...updatedMessages.map((m) => ({
@@ -202,25 +272,59 @@ export default function ChatWidget() {
           messages: chatMessages,
           temperature: 0.65,
           max_completion_tokens: 600,
+          stream: true,
         }),
       });
 
-      const data = await res.json();
-      const reply =
-        data?.choices?.[0]?.message?.content ||
-        'I could not process that. Please try again.';
+      if (!res.ok || !res.body) throw new Error(`Request failed: ${res.status}`);
 
-      setMessages((prev) => [...prev, { role: 'model', text: reply }]);
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let accumulated = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop(); // keep the trailing partial line for next chunk
+
+        for (const line of lines) {
+          const t = line.trim();
+          if (!t.startsWith('data:')) continue;
+          const payload = t.slice(5).trim();
+          if (payload === '[DONE]') continue;
+          try {
+            const delta = JSON.parse(payload)?.choices?.[0]?.delta?.content;
+            if (delta) {
+              accumulated += delta;
+              patchLastMessage({ text: accumulated });
+            }
+          } catch {
+            // Incomplete JSON split across chunk boundaries — safe to skip;
+            // the buffered remainder rejoins on the next read.
+          }
+        }
+      }
+
+      patchLastMessage({
+        text: accumulated || 'I could not process that. Please try again.',
+        streaming: false,
+      });
     } catch {
-      setMessages((prev) => [
-        ...prev,
-        { role: 'model', text: 'I seem to be offline right now. Please try again in a moment. 🙏' },
-      ]);
+      patchLastMessage({
+        text: 'I seem to be offline right now. Please try again in a moment. 🙏',
+        streaming: false,
+      });
     } finally {
       setLoading(false);
       setTimeout(() => inputRef.current?.focus(), 50);
     }
   };
+
+  const lastMsg = messages[messages.length - 1];
+  const showFollowups = !loading && lastMsg?.role === 'model' && !lastMsg?.streaming;
 
   return (
     <>
@@ -275,20 +379,31 @@ export default function ChatWidget() {
 
           {messages.map((msg, i) => (
             <div key={i} className={`chat-bubble chat-bubble--${msg.role}`}>
-              {msg.text.split('\n').map((line, j) => (
-                <span key={j}>
-                  {line}
-                  {j < msg.text.split('\n').length - 1 && <br />}
-                </span>
-              ))}
+              {msg.role === 'model' && msg.streaming && !msg.text ? (
+                <div className="chat-typing">
+                  <span /><span /><span />
+                </div>
+              ) : (
+                msg.text.split('\n').map((line, j, arr) => (
+                  <span key={j}>
+                    {msg.role === 'model' ? linkifyLine(line, `${i}-${j}`) : line}
+                    {j < arr.length - 1 && <br />}
+                  </span>
+                ))
+              )}
             </div>
           ))}
 
-          {loading && (
-            <div className="chat-bubble chat-bubble--model">
-              <div className="chat-typing">
-                <span /><span /><span />
-              </div>
+          {showFollowups && (
+            <div className="chat-followups">
+              {FOLLOWUPS.map((f) => (
+                <button key={f.key} className="chat-suggestion-btn chat-suggestion-btn--sm" onClick={() => sendMessage(f.prompt)}>
+                  {f.label}
+                </button>
+              ))}
+              <Link to="/temples" className="chat-suggestion-btn chat-suggestion-btn--sm">
+                🗺️ See the Trail Map
+              </Link>
             </div>
           )}
 

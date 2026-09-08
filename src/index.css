@@ -420,12 +420,46 @@ h1, h2, h3, h4, .font-display {
   cursor: pointer;
   transition: var(--transition-fast);
   font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .chat-suggestion-btn:hover {
   background: rgba(184, 134, 11, 0.15);
   border-color: rgba(184, 134, 11, 0.45);
   color: hsl(var(--charcoal));
+}
+
+.chat-suggestion-btn--sm {
+  font-size: 0.72rem;
+  padding: 0.3rem 0.7rem;
+}
+
+/* Follow-up chips shown under the most recent completed reply — same
+   pill styling as the welcome-screen suggestions, offered again mid-chat
+   so the conversation keeps going instead of dead-ending. */
+.chat-followups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-self: flex-start;
+  max-width: 88%;
+  padding-left: 0.1rem;
+}
+
+/* A temple name inside Veer's reply — clicking jumps straight to that
+   temple's real page (photos, full history) instead of staying as inert
+   text the reader can't act on. */
+.chat-temple-link {
+  color: #92400e;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(184, 134, 11, 0.45);
+  text-underline-offset: 2px;
+}
+.chat-temple-link:hover {
+  color: hsl(var(--saffron));
+  text-decoration-color: hsl(var(--saffron));
 }
 
 .chat-bubble {
