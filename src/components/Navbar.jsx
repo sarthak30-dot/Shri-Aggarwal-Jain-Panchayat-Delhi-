@@ -30,7 +30,7 @@ const Navbar = () => {
 
   return (
     <header
-      className={scrolled ? 'nav-blur' : 'nav-transparent'}
+      className={scrolled ? 'site-header scrolled' : 'site-header'}
       style={{
         position: 'fixed',
         top: 0, left: 0, right: 0,
@@ -39,7 +39,6 @@ const Navbar = () => {
         display: 'flex',
         alignItems: 'center',
         transition: 'var(--transition-smooth)',
-        boxShadow: scrolled ? '0 10px 30px -10px rgba(0,0,0,0.3)' : 'none',
       }}
     >
       <div className="container-heritage" style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
@@ -58,10 +57,10 @@ const Navbar = () => {
               style={{ width: scrolled ? '38px' : '48px', height: scrolled ? '38px' : '48px', transition: 'var(--transition-smooth)' }}
             />
             <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
-              <span style={{ fontFamily: 'var(--font-display)', fontSize: scrolled ? '0.95rem' : '1.15rem', fontWeight: 700, color: 'hsl(var(--ivory))', letterSpacing: '0.02em', transition: 'var(--transition-smooth)' }}>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: scrolled ? '0.95rem' : '1.15rem', fontWeight: 700, color: 'var(--nav-logo)', letterSpacing: '0.02em', transition: 'var(--transition-smooth)' }}>
                 Heritage Connect
               </span>
-              <span style={{ fontSize: scrolled ? '8px' : '10px', fontWeight: 600, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#FFD27A', transition: 'var(--transition-smooth)' }}>
+              <span style={{ fontSize: scrolled ? '8px' : '10px', fontWeight: 600, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--nav-subtitle)', transition: 'var(--transition-smooth)' }}>
                 Panchayat • Old Delhi
               </span>
             </div>
@@ -76,27 +75,29 @@ const Navbar = () => {
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '0.875rem',
-                  fontWeight: 500,
-                  color: isActive(link.to) ? '#FFD27A' : (scrolled ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.95)'),
+                  fontWeight: isActive(link.to) ? 600 : 500,
+                  color: 'var(--nav-text)',
                   textDecoration: 'none',
                   letterSpacing: '0.05em',
                   position: 'relative',
                   padding: '0.5rem 0',
                   transition: 'color 0.3s',
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = '#FFD27A'; e.currentTarget.children[0].style.width = '100%'; }}
+                onMouseEnter={(e) => { e.currentTarget.children[0].style.width = '100%'; }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = isActive(link.to) ? '#FFD27A' : (scrolled ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.95)');
                   e.currentTarget.children[0].style.width = isActive(link.to) ? '100%' : '0';
                 }}
               >
                 {link.label}
+                {/* Active-state indicator — the only place link text carries the
+                    brand accent color; the label itself always stays neutral
+                    charcoal/off-white so color is never the sole signal. */}
                 <span
                   style={{
                     position: 'absolute', bottom: 0, left: 0,
                     width: isActive(link.to) ? '100%' : '0',
                     height: '1.5px',
-                    background: 'linear-gradient(to right, #FFD27A, hsl(var(--saffron)))',
+                    background: 'var(--nav-accent)',
                     transition: 'var(--transition-fast)',
                   }}
                 />
@@ -116,7 +117,7 @@ const Navbar = () => {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="mobile-toggle"
-            style={{ display: 'none', background: 'none', border: 'none', color: 'hsl(var(--ivory))', cursor: 'pointer', padding: '0.25rem' }}
+            style={{ display: 'none', background: 'none', border: 'none', color: 'var(--nav-text)', cursor: 'pointer', padding: '0.25rem' }}
             aria-label="Toggle menu"
           >
             {mobileOpen ? (

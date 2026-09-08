@@ -17,6 +17,48 @@
 
   --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-fast: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Header / nav theming ──
+     Light mode (default): charcoal text on pure white, brand gold reserved
+     strictly for accents — the active-tab underline and the Donate button.
+     The old pale #FFD27A text vanished against white; every nav text role
+     now resolves to a charcoal/off-white pair and never carries the accent
+     color itself. */
+  --nav-bg:        #ffffff;
+  --nav-border:    rgba(17, 24, 39, 0.10);   /* thin gray-100-ish rule */
+  --nav-shadow:    0 1px 2px rgba(17, 24, 39, 0.06);
+  --nav-shadow-lg: 0 4px 16px -6px rgba(17, 24, 39, 0.12);
+  --nav-text:      #27272a;   /* zinc-800 charcoal */
+  --nav-logo:      #18181b;   /* zinc-900 for the wordmark */
+  --nav-subtitle:  #3f3f46;   /* zinc-700 charcoal — was pale amber, unreadable on white */
+  --nav-accent:    #d97706;   /* amber-600 — underline + Donate only, reads on white */
+}
+
+/* Dark mode: elevated gray (not pure black), off-white text, brand gold kept
+   for the logo, active underline, and Donate — all of which pop on the dark bg.
+   Class-free — follows the viewer's OS preference. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --nav-bg:        #18181b;   /* zinc-900 elevated gray */
+    --nav-border:    rgba(255, 255, 255, 0.10);
+    --nav-shadow:    none;
+    --nav-shadow-lg: 0 6px 20px -8px rgba(0, 0, 0, 0.6);
+    --nav-text:      #f9fafb;   /* gray-50 off-white */
+    --nav-logo:      #FFD27A;   /* brand gold wordmark */
+    --nav-subtitle:  #FFD27A;
+    --nav-accent:    #FFD27A;
+  }
+}
+
+/* Flat solid header — replaces the transparent-over-hero overlay so the nav is
+   legible on every page, not just over the dark home hero. */
+.site-header {
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+  box-shadow: var(--nav-shadow);
+}
+.site-header.scrolled {
+  box-shadow: var(--nav-shadow-lg);
 }
 
 * {
@@ -132,18 +174,6 @@ h1, h2, h3, h4, .font-display {
   color: hsl(var(--charcoal));
   border-color: hsl(var(--ivory));
   transform: translateY(-2px);
-}
-
-.nav-blur {
-  background: hsla(var(--charcoal) / 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid hsla(0 0% 100% / 0.06);
-}
-
-.nav-transparent {
-  background: transparent;
-  border-bottom: 1px solid transparent;
 }
 
 .heritage-card {
@@ -513,4 +543,271 @@ h1, h2, h3, h4, .font-display {
     right: 1.25rem;
     bottom: 1.25rem;
   }
+}
+
+/* ── Temple trail map ──
+   Card wraps the Leaflet canvas; popups stay charcoal-on-white regardless of
+   site theme since they always sit on top of the (always-light) basemap. */
+.trail-map-wrap {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(184, 134, 11, 0.18);
+  box-shadow: 0 10px 30px -12px rgba(17, 24, 39, 0.18);
+  background: #fff;
+}
+
+.trail-map {
+  width: 100%;
+  height: 460px;
+  background: #FAF5EF;
+}
+
+.trail-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 0.9rem 1.25rem;
+  border-top: 1px solid rgba(184, 134, 11, 0.15);
+  font-size: 0.8rem;
+  color: #52525b;
+}
+
+.trail-legend__item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.trail-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: hsl(var(--charcoal));
+  border: 2px solid #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+}
+.trail-pin span {
+  display: block;
+  transform: rotate(45deg);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.trail-pin--accent {
+  background: linear-gradient(135deg, hsl(var(--gold-glow)) 0%, hsl(var(--saffron)) 100%);
+}
+.trail-pin--sm {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.trail-pin--sm span {
+  font-size: 0.55rem;
+}
+
+.trail-popup {
+  font-family: var(--font-body);
+  min-width: 200px;
+}
+.trail-popup__est {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: hsl(var(--saffron));
+  margin-bottom: 0.2rem;
+}
+.trail-popup h4 {
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  color: #18181b;
+  line-height: 1.25;
+  margin: 0 0 0.3rem;
+}
+.trail-popup p {
+  font-size: 0.78rem;
+  color: #6b7280;
+  margin: 0 0 0.6rem;
+  line-height: 1.4;
+}
+.trail-popup__link {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #d97706;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+.trail-popup__link:hover {
+  text-decoration: underline;
+}
+.trail-popup__next {
+  font-size: 0.72rem !important;
+  color: #92400e !important;
+  background: #fffbeb;
+  border-radius: 6px;
+  padding: 0.4rem 0.55rem !important;
+  margin: 0 0 0.6rem !important;
+  line-height: 1.45 !important;
+}
+.trail-popup__next strong {
+  color: #18181b;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 10px;
+  box-shadow: 0 10px 25px -8px rgba(17, 24, 39, 0.3);
+}
+.leaflet-popup-content {
+  margin: 0.85rem 1rem;
+}
+
+.trail-itinerary {
+  padding: 1.1rem 1.25rem 0.9rem;
+  border-top: 1px solid rgba(184, 134, 11, 0.15);
+}
+
+.trail-itinerary__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.6rem;
+  scrollbar-width: thin;
+}
+
+.trail-itinerary__stop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  width: 92px;
+  text-align: center;
+}
+
+.trail-itinerary__name {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #27272a;
+  line-height: 1.25;
+}
+
+.trail-itinerary__leg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  flex-shrink: 0;
+  min-width: 68px;
+  margin-top: 9px;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: #d97706;
+  white-space: nowrap;
+  position: relative;
+}
+.trail-itinerary__leg::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: repeating-linear-gradient(to right, #d97706 0 4px, transparent 4px 8px);
+}
+.trail-itinerary__dot {
+  color: rgba(217, 119, 6, 0.5);
+}
+
+.trail-itinerary__total {
+  font-size: 0.8rem;
+  color: #52525b;
+  margin: 0;
+}
+.trail-itinerary__total strong {
+  color: #18181b;
+}
+.trail-itinerary__caveat {
+  font-size: 0.72rem;
+  color: #a1a1aa;
+  font-style: italic;
+}
+
+/* ── Map / Satellite toggle ── a Leaflet control, styled to match the
+   brand rather than Leaflet's default grey chrome. */
+.trail-basemap-toggle {
+  display: flex;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.25);
+  border: 1px solid rgba(17, 24, 39, 0.1);
+}
+.trail-basemap-btn {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.4rem 0.65rem;
+  border: none;
+  background: #fff;
+  color: #52525b;
+  cursor: pointer;
+  line-height: 1;
+}
+.trail-basemap-btn:first-child {
+  border-right: 1px solid rgba(17, 24, 39, 0.1);
+}
+.trail-basemap-btn.active {
+  background: hsl(var(--charcoal));
+  color: #fff;
+}
+.trail-basemap-btn:hover:not(.active) {
+  background: #f4f4f5;
+}
+
+/* ── Beyond-the-walls distance list ── */
+.trail-beyond {
+  padding: 0 1.25rem 1.1rem;
+}
+.trail-beyond__label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #71717a;
+  margin-bottom: 0.6rem;
+}
+.trail-beyond__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.trail-beyond__list li {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #27272a;
+}
+.trail-beyond__km {
+  font-weight: 400;
+  color: #a1a1aa;
+  font-size: 0.76rem;
+}
+
+@media (max-width: 640px) {
+  .trail-map { height: 360px; }
+  .trail-legend { flex-direction: column; gap: 0.6rem; }
+  .trail-beyond__list li { flex-wrap: wrap; }
 }

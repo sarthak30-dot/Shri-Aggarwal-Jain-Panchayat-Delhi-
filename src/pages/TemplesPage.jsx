@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TempleCard from '../components/TempleCard';
+import TempleTrailMap from '../components/TempleTrailMap';
 import { temples } from '../data/temples';
 
 export default function TemplesPage() {
@@ -34,6 +35,22 @@ export default function TemplesPage() {
           </p>
         </div>
       </div>
+
+      {/* Trail map */}
+      <section style={{ padding: '4rem 0 3.5rem', backgroundColor: '#FAF5EF' }}>
+        <div className="container-heritage">
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#d97706', display: 'block', marginBottom: '0.5rem' }}>
+            Walk It Yourself
+          </span>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 2.5vw, 2.1rem)', color: '#18181b', marginBottom: '0.75rem' }}>
+            The Old Delhi Temple Trail
+          </h2>
+          <p style={{ maxWidth: '640px', fontSize: '0.95rem', color: '#52525b', lineHeight: 1.7, marginBottom: '2rem' }}>
+            Nine temples sit close enough within the walled city to visit on foot in a single trip — tap any pin for details. The remaining three carry the same Panchayat further across Delhi.
+          </p>
+          <TempleTrailMap />
+        </div>
+      </section>
 
       {/* Filter bar */}
       <div style={{ backgroundColor: '#FAF5EF', borderBottom: '1px solid rgba(184,134,11,0.12)', padding: '1.25rem 0' }}>
