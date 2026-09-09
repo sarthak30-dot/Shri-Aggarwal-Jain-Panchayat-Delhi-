@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ChatWidget from './components/ChatWidget';
+import NamokarPlayer from './components/NamokarPlayer';
 
 import HomePage          from './pages/HomePage';
 import TemplesPage       from './pages/TemplesPage';
@@ -40,6 +41,7 @@ export default function App() {
       </main>
       <Footer />
       <ChatWidget />
+      <NamokarPlayer />
     </BrowserRouter>
   );
 }

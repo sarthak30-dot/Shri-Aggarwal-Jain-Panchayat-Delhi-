@@ -845,3 +845,118 @@ h1, h2, h3, h4, .font-display {
   .trail-legend { flex-direction: column; gap: 0.6rem; }
   .trail-beyond__list li { flex-wrap: wrap; }
 }
+
+/* ── Welcome gate ──
+   Full-screen "Enter Mandir" threshold shown on every fresh page load —
+   the click it requires is also what unlocks the Namokar Mantra audio, since
+   browsers block unprompted autoplay but allow playback started from a
+   genuine user gesture. z-index 2000 sits above the chat FAB (1000) so
+   nothing behind the gate is reachable until it's dismissed. */
+.mandir-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: mandirGateIn 0.6s ease both;
+}
+@keyframes mandirGateIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.mandir-gate__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 30%;
+}
+.mandir-gate__scrim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, hsla(220, 20%, 8%, 0.82) 0%, hsla(220, 20%, 6%, 0.96) 100%);
+}
+.mandir-gate__inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 480px;
+  padding: 2rem 1.5rem;
+}
+.mandir-gate__logo {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 1.25rem;
+  filter: drop-shadow(0 0 18px hsla(43, 90%, 55%, 0.5));
+}
+.mandir-gate__eyebrow {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: hsl(var(--saffron));
+  margin-bottom: 0.85rem;
+}
+.mandir-gate__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  color: hsl(var(--ivory));
+  margin-bottom: 1rem;
+  line-height: 1.15;
+}
+.mandir-gate__line {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+.mandir-gate__btn {
+  font-size: 0.95rem;
+  padding: 0.85rem 2.25rem;
+}
+
+/* ── Sticky Namokar Mantra control ──
+   Bottom-left, mirroring the chat FAB's bottom-right placement so neither
+   covers the other. Persists across every route since it's mounted once
+   at the App root, outside <Routes> — client-side navigation never
+   remounts it, so playback continues uninterrupted between pages. */
+.mandir-audio-bar {
+  position: fixed;
+  bottom: 1.75rem;
+  left: 1.5rem;
+  z-index: 950;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: hsl(var(--charcoal));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem 0.4rem 0.4rem;
+  box-shadow: 0 6px 20px -6px rgba(0, 0, 0, 0.5);
+}
+.mandir-audio-bar__btn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, hsl(var(--gold-glow)), hsl(var(--gold)));
+  color: hsl(var(--charcoal));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.mandir-audio-bar__label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .mandir-audio-bar__label { display: none; }
+  .mandir-audio-bar { padding: 0.4rem; }
+}
