@@ -13,6 +13,7 @@ import DharamshaalaPage  from './pages/DharamshaalaPage';
 import LibraryPage       from './pages/LibraryPage';
 import SchoolsPage       from './pages/SchoolsPage';
 import DonatePage        from './pages/DonatePage';
+import HistoryPage       from './pages/HistoryPage';
 import NotFoundPage      from './pages/NotFoundPage';
 
 function ScrollToTop() {
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/dharamshala"        element={<DharamshaalaPage />} />
           <Route path="/library"            element={<LibraryPage />} />
           <Route path="/schools"            element={<SchoolsPage />} />
+          <Route path="/history"            element={<HistoryPage />} />
           <Route path="/donate"             element={<DonatePage />} />
           <Route path="*"                   element={<NotFoundPage />} />
         </Routes>
