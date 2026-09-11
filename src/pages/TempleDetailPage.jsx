@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { temples } from '../data/temples';
+import { getTempleHistory } from '../data/templeHistory';
 import PhotoGallery from '../components/PhotoGallery';
 
 export default function TempleDetailPage() {
@@ -18,6 +19,7 @@ export default function TempleDetailPage() {
     );
   }
 
+  const history = getTempleHistory(slug);
   const currentIdx = temples.findIndex((t) => t.slug === slug);
   const prevTemple = temples[currentIdx - 1] || null;
   const nextTemple = temples[currentIdx + 1] || null;
@@ -213,6 +215,150 @@ export default function TempleDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Historical Chronicle — shown only for temples with manuscript coverage */}
+      {history && (
+        <div style={{ backgroundColor: '#FAF5EF', padding: '5rem 0', borderTop: '1px solid rgba(184,134,11,0.15)' }}>
+          <div className="container-heritage">
+
+            {/* Section header */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.75rem' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--saffron))" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+              </svg>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', color: 'hsl(var(--charcoal))' }}>
+                Historical Chronicle
+              </h2>
+            </div>
+            <p style={{ fontSize: '0.8rem', color: '#9A7B2E', marginBottom: '3rem', fontStyle: 'italic' }}>
+              Translated from the Shahjahanabad manuscript — archival records of the historic Jain temples of Old Delhi
+            </p>
+
+            {/* Meta-info row */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+              {history.eraEstablished && (
+                <div style={{ background: '#fff', border: '1px solid rgba(184,134,11,0.25)', borderRadius: '8px', padding: '0.9rem 1.25rem' }}>
+                  <p style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#B8860B', marginBottom: '0.3rem' }}>Era Established</p>
+                  <p style={{ fontSize: '0.9rem', color: 'hsl(var(--charcoal))', fontWeight: 600 }}>{history.eraEstablished}</p>
+                </div>
+              )}
+              {history.consecrationDate && (
+                <div style={{ background: '#fff', border: '1px solid rgba(184,134,11,0.25)', borderRadius: '8px', padding: '0.9rem 1.25rem' }}>
+                  <p style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#B8860B', marginBottom: '0.3rem' }}>Consecration</p>
+                  <p style={{ fontSize: '0.9rem', color: 'hsl(var(--charcoal))', fontWeight: 600 }}>{history.consecrationDate}</p>
+                </div>
+              )}
+              {history.moolnayakDeity && (
+                <div style={{ background: '#fff', border: '1px solid rgba(184,134,11,0.25)', borderRadius: '8px', padding: '0.9rem 1.25rem', flex: '1 1 280px' }}>
+                  <p style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#B8860B', marginBottom: '0.3rem' }}>Moolnayak Deity</p>
+                  <p style={{ fontSize: '0.9rem', color: 'hsl(var(--charcoal))', fontWeight: 600 }}>{history.moolnayakDeity}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Alternate names */}
+            {history.alternateNames && history.alternateNames.length > 0 && (
+              <div style={{ marginBottom: '2.5rem' }}>
+                <p style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#B8860B', marginBottom: '0.6rem' }}>Also known as</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  {history.alternateNames.map((n) => (
+                    <span key={n} style={{ fontSize: '0.82rem', color: '#666', background: '#fff', border: '1px solid rgba(184,134,11,0.2)', borderRadius: '20px', padding: '0.25rem 0.75rem' }}>
+                      {n}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Historical Events Timeline */}
+            {history.historicalEvents && history.historicalEvents.length > 0 && (
+              <div style={{ marginBottom: '3.5rem' }}>
+                <h3 style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#B8860B', marginBottom: '2rem' }}>
+                  Historical Events
+                </h3>
+                <div style={{ position: 'relative', paddingLeft: '2rem' }}>
+                  {/* Vertical line */}
+                  <div style={{ position: 'absolute', left: '7px', top: '8px', bottom: '8px', width: '2px', background: 'linear-gradient(to bottom, hsl(var(--saffron)), rgba(184,134,11,0.1))' }} />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                    {history.historicalEvents.map((ev, i) => (
+                      <div key={i} style={{ position: 'relative' }}>
+                        {/* Timeline dot */}
+                        <div style={{ position: 'absolute', left: '-2rem', top: '4px', width: '14px', height: '14px', borderRadius: '50%', backgroundColor: i === 0 ? 'hsl(var(--saffron))' : '#fff', border: '2px solid hsl(var(--saffron))', boxSizing: 'border-box' }} />
+                        <div style={{ background: '#fff', borderRadius: '8px', padding: '1.25rem 1.5rem', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', border: '1px solid rgba(184,134,11,0.1)' }}>
+                          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '0.6rem' }}>
+                            <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'hsl(var(--charcoal))', lineHeight: 1.3 }}>{ev.title}</h4>
+                            {ev.period && (
+                              <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'hsl(var(--saffron))', backgroundColor: 'rgba(255,127,36,0.1)', border: '1px solid rgba(255,127,36,0.25)', borderRadius: '4px', padding: '0.15rem 0.5rem', whiteSpace: 'nowrap' }}>
+                                {ev.period}
+                              </span>
+                            )}
+                          </div>
+                          <p style={{ fontSize: '0.9rem', color: '#555', lineHeight: 1.75 }}>{ev.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Architectural Highlights + Unique Features — two-column grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginBottom: '2.5rem' }}>
+
+              {history.architecturalHighlights && history.architecturalHighlights.length > 0 && (
+                <div>
+                  <h3 style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#B8860B', marginBottom: '1.25rem' }}>
+                    Architectural Highlights
+                  </h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                    {history.architecturalHighlights.map((h, i) => (
+                      <div key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--saffron))" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ marginTop: '3px', flexShrink: 0 }}>
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <p style={{ fontSize: '0.88rem', color: '#444', lineHeight: 1.65 }}>{h}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {history.uniqueFeatures && history.uniqueFeatures.length > 0 && (
+                <div>
+                  <h3 style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#B8860B', marginBottom: '1.25rem' }}>
+                    Unique Features
+                  </h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                    {history.uniqueFeatures.map((f, i) => (
+                      <div key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                        <div style={{ width: '7px', height: '7px', borderRadius: '1px', backgroundColor: 'hsl(var(--saffron))', marginTop: '5px', flexShrink: 0, transform: 'rotate(45deg)' }} />
+                        <p style={{ fontSize: '0.88rem', color: '#444', lineHeight: 1.65 }}>{f}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Prominent Figures */}
+            {history.prominentFigures && history.prominentFigures.length > 0 && (
+              <div>
+                <h3 style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#B8860B', marginBottom: '0.85rem' }}>
+                  Prominent Figures
+                </h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  {history.prominentFigures.map((f) => (
+                    <span key={f} style={{ fontSize: '0.82rem', color: 'hsl(var(--charcoal))', background: '#fff', border: '1px solid rgba(184,134,11,0.25)', borderRadius: '4px', padding: '0.3rem 0.85rem', fontWeight: 500 }}>
+                      {f}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+          </div>
+        </div>
+      )}
 
       {/* Prev / Next navigation */}
       <div style={{ backgroundColor: '#FAF5EF', borderTop: '1px solid rgba(184,134,11,0.12)', padding: '2.5rem 0' }}>
