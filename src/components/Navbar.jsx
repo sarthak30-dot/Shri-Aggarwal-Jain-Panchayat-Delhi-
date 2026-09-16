@@ -6,7 +6,6 @@ const navLinks = [
   { label: 'Home',    to: '/' },
   { label: 'Temples', to: '/temples' },
   { label: 'History', to: '/history' },
-  { label: 'Library', to: '/library' },
 ];
 
 const Navbar = () => {
