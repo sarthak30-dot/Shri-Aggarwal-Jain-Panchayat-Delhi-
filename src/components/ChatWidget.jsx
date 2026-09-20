@@ -9,12 +9,20 @@ import {
   templeLinkEntries,
 } from '../lib/chatbotKnowledge';
 
-// Groq — OpenAI-compatible chat completions API. openai/gpt-oss-120b is
-// Groq's own recommended replacement for the now-deprecated
-// llama-3.3-70b-versatile (deprecated for free/developer-tier use, June 2026).
-const API_KEY = import.meta.env.VITE_GROQ_API_KEY;
-const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const MODEL = 'openai/gpt-oss-120b';
+// NVIDIA NIM — OpenAI-compatible chat completions API. moonshotai/kimi-k3
+// never returned a response (verified: requests hang indefinitely with 0
+// bytes received, even after 60s, while other models on the same endpoint
+// respond in under a second) — swapped for openai/gpt-oss-20b, the only
+// other chat model available on this account that was confirmed working.
+//
+// Routed through /api/chat (a same-origin Vercel Edge Function, see
+// api/chat.js) rather than called directly — integrate.api.nvidia.com sends
+// no Access-Control-Allow-Origin header, so a direct browser fetch is
+// blocked by CORS before it reaches the network ("TypeError: Failed to
+// fetch"). The proxy also keeps the API key server-side instead of shipping
+// it in the client bundle.
+const API_URL = '/api/chat';
+const MODEL = "openai/gpt-oss-20b";
 
 const SYSTEM_PROMPT = `
 You are Veer (वीर), the official digital guide for the Shri Digambar Jain Panchayat, Old Delhi — representing all ${templeCount} historic temples on this site, the world-famous Jain Charitable Birds Hospital, and its dharamshalas, schools, and library.
@@ -27,6 +35,7 @@ TONE:
 FORMAT:
 - Short, crisp, directly to the point — no overly long paragraphs
 - Maximum 2-3 sentences per response, unless listing temple timings or step-by-step visiting information
+- IMPORTANT: Whenever you mention a specific temple by name (e.g., Lal Mandir, Naya Mandir, Bada Mandir), ALWAYS wrap the name in **bold** asterisks. Example: **Lal Mandir**. This allows the UI to create clickable links.
 - If you don't know exact timings or contact numbers, say so honestly and suggest calling the Panchayat office — never invent them
 
 GUIDING PHILOSOPHY (uphold these in how you respond, not only what you say):
@@ -34,16 +43,22 @@ GUIDING PHILOSOPHY (uphold these in how you respond, not only what you say):
 - Anekantavada (many-sidedness of truth) — acknowledge other perspectives respectfully rather than asserting one view as the only one
 - Aparigraha (non-attachment) — no self-promotion, no persona beyond Veer
 
-KNOWLEDGE BASE:
-1. Ground every answer FIRST in the temple, hospital, dharamshala, school, and library data below
-2. For general Jainism questions, provide verified information on the 24 Tirthankaras, Jain Agamas, and Jain history
+KNOWLEDGE BASE & PERMISSIONS:
+1. PANCHAYAT INFO: For any questions about the specific temples, hospital, dharamshala, schools, or library listed below, you MUST ground your answer ONLY in the provided text. Do not invent timings, names, or history. If it's not in the text, say you don't know and suggest calling the Panchayat office.
+2. GENERAL JAINISM: You are ENCOURAGED to use your own broad, pre-trained knowledge to answer general questions about Jainism (e.g., "What is Karma?", "Who was Lord Mahavira?", "Explain the Namokar Mantra"). Provide accurate, verified information based on Jain philosophy.
 
 STRICT GUARDRAILS — these override everything else:
-- You are strictly limited to Jainism, Jain philosophy, and the temples/institutions described below
-- If asked about politics, other religions, coding, general trivia, personal advice, or ANY topic outside Jainism and this Panchayat, you MUST refuse
+- You are strictly limited to Jainism, Jain philosophy, and the Panchayat institutions described below.
+- If asked about politics, other religions, coding, general trivia, personal advice, or ANY topic entirely outside Jainism and this Panchayat, you MUST refuse.
 - Rejection phrase: reply with EXACTLY "I cannot help you with this one." and nothing else — no explanation, no softening, no elaboration
 - Never generate jokes, engage in debates, or adopt any persona other than Veer
 - If a user is abusive or disrespectful, end the conversation politely but firmly rather than continuing to engage on that message
+
+EXAMPLE INTERACTIONS:
+User: "What are the timings for Naya Mandir?"
+Veer: "Jai Jinendra 🙏. For exact visiting hours of **Naya Mandir**, please contact the Panchayat office directly, as timings can occasionally change."
+User: "Can you write a Python script for me?"
+Veer: "I cannot help you with this one."
 
 ═══════════════════════════════════
 THE ${templeCount} TEMPLES — COMPLETE KNOWLEDGE
@@ -265,18 +280,28 @@ export default function ChatWidget() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${API_KEY}`,
         },
         body: JSON.stringify({
           model: MODEL,
           messages: chatMessages,
           temperature: 0.65,
-          max_completion_tokens: 600,
+          // gpt-oss is a reasoning model — with the full knowledge-base system
+          // prompt it can burn the entire completion budget on chain-of-thought
+          // before ever emitting the actual answer (verified: 600 tokens of
+          // reasoning, finish_reason "length", content: null). Capping
+          // reasoning effort keeps the visible answer from being starved.
+          chat_template_kwargs: { reasoning_effort: 'low' },
+          max_completion_tokens: 800,
           stream: true,
         }),
       });
 
-      if (!res.ok || !res.body) throw new Error(`Request failed: ${res.status}`);
+      if (!res.ok || !res.body) {
+        if (res.status === 429) {
+          throw new Error('RATE_LIMIT');
+        }
+        throw new Error(`Request failed: ${res.status}`);
+      }
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
@@ -302,8 +327,7 @@ export default function ChatWidget() {
               patchLastMessage({ text: accumulated });
             }
           } catch {
-            // Incomplete JSON split across chunk boundaries — safe to skip;
-            // the buffered remainder rejoins on the next read.
+            // Incomplete JSON split across chunk boundaries
           }
         }
       }
@@ -312,9 +336,12 @@ export default function ChatWidget() {
         text: accumulated || 'I could not process that. Please try again.',
         streaming: false,
       });
-    } catch {
+    } catch (error) {
+      console.error("ChatWidget Error:", error);
       patchLastMessage({
-        text: 'I seem to be offline right now. Please try again in a moment. 🙏',
+        text: error.message === 'RATE_LIMIT' 
+          ? 'I am answering too many questions right now! Groq rate limit reached. Please wait a minute and try again. 🙏' 
+          : 'I seem to be offline right now. Please try again in a moment. 🙏',
         streaming: false,
       });
     } finally {

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import { temples } from '../data/temples';
 import { getTempleHistory } from '../data/templeHistory';
 import PhotoGallery from '../components/PhotoGallery';
@@ -7,8 +7,23 @@ import PhotoGallery from '../components/PhotoGallery';
 export default function TempleDetailPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const temple = temples.find((t) => t.slug === slug);
   const [activeVideo, setActiveVideo] = useState(0);
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [location.hash, slug]);
 
   if (!temple) {
     return (
@@ -218,7 +233,7 @@ export default function TempleDetailPage() {
 
       {/* Historical Chronicle — shown only for temples with manuscript coverage */}
       {history && (
-        <div style={{ backgroundColor: '#FAF5EF', padding: '5rem 0', borderTop: '1px solid rgba(184,134,11,0.15)' }}>
+        <div id="history" style={{ backgroundColor: '#FAF5EF', padding: '5rem 0', borderTop: '1px solid rgba(184,134,11,0.15)' }}>
           <div className="container-heritage">
 
             {/* Section header */}
