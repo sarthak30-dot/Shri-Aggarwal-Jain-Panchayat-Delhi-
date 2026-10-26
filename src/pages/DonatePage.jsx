@@ -1,7 +1,8 @@
 import React from 'react';
+import { templeCount } from '../lib/chatbotKnowledge';
 
 const causes = [
-  { icon: '🏛️', title: 'Temple Restoration', desc: 'Fund the preservation of Mughal-era stonework, frescoes, and sculptures in the 14 heritage temples.' },
+  { icon: '🏛️', title: 'Temple Restoration', desc: `Fund the preservation of Mughal-era stonework, frescoes, and sculptures in the ${templeCount} heritage temples.` },
   { icon: '🐦', title: 'Birds Hospital', desc: 'Support medicines, surgeries, ambulance fuel, and staff at the world\'s only free avian hospital.' },
   { icon: '📚', title: 'Schools & Pathshala', desc: 'Help provide free Jain education to children of the community — scripture, language, and values.' },
   { icon: '🏠', title: 'Dharamshala Upkeep', desc: 'Maintain pilgrim rest houses so that every devotee can travel for darshan without financial worry.' },

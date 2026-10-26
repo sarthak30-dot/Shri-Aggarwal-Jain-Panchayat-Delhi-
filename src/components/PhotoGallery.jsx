@@ -76,6 +76,7 @@ export default function PhotoGallery({ images, title }) {
         >
           <button
             onClick={close}
+            aria-label="Close photo"
             style={{ position: 'absolute', top: '1.5rem', right: '2rem', background: 'none', border: 'none', color: '#fff', fontSize: '2rem', cursor: 'pointer', lineHeight: 1 }}
           >
             ×
@@ -83,6 +84,7 @@ export default function PhotoGallery({ images, title }) {
 
           <button
             onClick={(e) => { e.stopPropagation(); showPrev(); }}
+            aria-label="Previous photo"
             style={{ position: 'absolute', left: '1rem', background: 'none', border: 'none', color: '#fff', fontSize: '2.5rem', cursor: 'pointer', padding: '1rem' }}
           >
             ‹
@@ -97,6 +99,7 @@ export default function PhotoGallery({ images, title }) {
 
           <button
             onClick={(e) => { e.stopPropagation(); showNext(); }}
+            aria-label="Next photo"
             style={{ position: 'absolute', right: '1rem', background: 'none', border: 'none', color: '#fff', fontSize: '2.5rem', cursor: 'pointer', padding: '1rem' }}
           >
             ›

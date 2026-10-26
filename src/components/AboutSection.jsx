@@ -1,4 +1,5 @@
 import React from 'react';
+import { templeCount } from '../lib/chatbotKnowledge';
 
 const iconProps = {
   width: 24,
@@ -57,7 +58,7 @@ const values = [
 ];
 
 const body = [
-  "For nearly four centuries, Shri Digambar Jain Panchayat has been the custodian of Old Delhi's sacred Jain heritage. From the Mughal era onwards, our community has built and protected fourteen temples, dharamshalas, schools and the world-renowned Charitable Birds Hospital — each one a living embodiment of Ahimsa.",
+  `For nearly four centuries, Shri Digambar Jain Panchayat has been the custodian of Old Delhi's sacred Jain heritage. From the Mughal era onwards, our community has built and protected ${templeCount} temples, along with dharamshalas, schools and the world-renowned Charitable Birds Hospital — each one a living embodiment of Ahimsa.`,
   'Our mission is to preserve this spiritual inheritance for future generations: through restoration, education, service to all living beings, and the quiet daily devotion that has sustained us since 1656 CE.',
 ];
 
