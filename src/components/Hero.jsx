@@ -9,6 +9,12 @@ const Hero = () => {
       style={{
         position: 'relative',
         paddingTop: '90px',
+        // The image's own aspect ratio can render shorter than the headline
+        // + subtitle + buttons need (especially once text wraps on narrow
+        // screens) — without this, the absolutely-positioned scroll
+        // indicator at the section's bottom edge lands on top of the
+        // overflowing text instead of below it.
+        minHeight: '100vh',
         overflow: 'hidden',
         backgroundColor: 'hsl(var(--charcoal))',
       }}
