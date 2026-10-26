@@ -3,9 +3,12 @@ import { Link, useLocation } from 'react-router-dom';
 import ahimsaLogo from '../assets/ahimsa_logo.svg';
 
 const navLinks = [
-  { label: 'Home',    to: '/' },
-  { label: 'Temples', to: '/temples' },
-  { label: 'History', to: '/history' },
+  { label: 'Home',           to: '/' },
+  { label: 'Temples',        to: '/temples' },
+  { label: 'History',        to: '/history' },
+  { label: 'Birds Hospital', to: '/birds-hospital' },
+  { label: 'Dharamshalas',   to: '/dharamshala' },
+  { label: 'Library',        to: '/library' },
 ];
 
 const Navbar = () => {
