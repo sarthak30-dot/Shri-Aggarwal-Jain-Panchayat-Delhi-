@@ -1,5 +1,6 @@
 import React from 'react';
 import imgBirdsHospital from '../assets/birds_hospital_web.jpg';
+import imgBirdsHospitalHeader from '../assets/birds_hospital_2_web.jpg';
 
 const stats = [
   { number: '~16,000', label: 'Birds Treated Every Year' },
@@ -20,7 +21,18 @@ export default function BirdsHospitalPage() {
     <div style={{ paddingTop: '90px', minHeight: '100vh' }}>
 
       {/* Header */}
-      <div style={{ padding: '5rem 0 4rem', backgroundColor: 'hsl(var(--charcoal))', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ padding: '7rem 0 4.5rem', backgroundColor: 'hsl(var(--charcoal))', position: 'relative', overflow: 'hidden' }}>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: `url(${imgBirdsHospitalHeader})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center 65%',
+            opacity: 0.4,
+          }}
+        />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, hsla(220,20%,11%,0.75) 0%, hsla(220,20%,11%,0.88) 60%, hsl(var(--charcoal)) 100%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 20% 50%, hsla(28,90%,20%,0.4) 0%, transparent 65%)', pointerEvents: 'none' }} />
         <div className="container-heritage" style={{ position: 'relative', zIndex: 1 }}>
           <span style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.35em', textTransform: 'uppercase', color: 'hsl(var(--saffron))', display: 'block', marginBottom: '1rem' }}>
