@@ -1,6 +1,7 @@
 import imgLalMandir           from '../assets/lal_mandir_real_web.jpg';
 import imgLalMandirJhanki     from '../assets/lal_mandir_interior_real_web.jpg';
 import imgChotaMandir         from '../assets/chota_mandir_real_web.jpg';
+import imgChotaMandirDarshan  from '../assets/chota_mandir_darshan_web.jpg';
 import imgBadaMandir          from '../assets/bada_mandir_real_web.jpg';
 import imgNayaMandir          from '../assets/temple_naya_mandir_web.jpg';
 import imgNayaMandir2         from '../assets/temple_naya_mandir_2_web.jpg';
@@ -66,6 +67,7 @@ export const temples = [
     moolnayak: 'Lord Shantinatha (16th Tirthankara)',
     featured: false,
     image: imgChotaMandir,
+    detailHeroImage: imgChotaMandirDarshan,
     images: chotaMandirGallery,
     videos: [],
   },

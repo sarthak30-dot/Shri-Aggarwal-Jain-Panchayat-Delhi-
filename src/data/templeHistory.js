@@ -181,8 +181,15 @@ export const templeHistoryMap = {
     architecturalHighlights: [
       'Erected directly opposite Bada Mandir on residential land donated by Indraj — built without prior planning, inspired entirely by devotion',
       'Six altars: the miraculous Chandraprabhu idol, five altars of ancient stone and metallic figures, and a shrine to Goddess Padmavati',
+      'Classic Shahjahanabad haveli style — an unassuming street face typical of Old Delhi homes conceals an interior of polished white marble, arched niches, and intricate carving, built inward-facing to keep the sanctum quiet and sheltered from the bazaar outside',
     ],
     historicalEvents: [
+      {
+        title: 'Twin Shrines of Kucha Seth',
+        period: 'c. 1824–1840 CE',
+        description:
+          "Kucha Seth — 'the lane of the wealthy merchants' — was home to affluent Agrawal Digambar Jain financiers, court jewellers, and sarrafs (money changers) who worked the Dariba Kalan jewellery market. Shri Digambar Jain Bada Mandir rose first, around 1824, as the neighbourhood's larger congregational complex. Chhota Mandir followed in 1840, in the twilight decades of the Mughal Empire under Bahadur Shah Zafar, built as a smaller, more intimate sanctuary for the immediate neighbourhood's daily puja and abhisheka — a quieter counterpart just across the lane from its larger neighbour.",
+      },
       {
         title: 'The Dream of Indraj & The Afghan Merchant',
         period: '~1840 CE',
