@@ -33,10 +33,11 @@ export const temples = [
     detailHeroImage: imgLalMandirJhanki,
     detailHeroPosition: 'center top',
     images: lalMandirGallery,
-    videos: [
-      { src: '/videos/lal-mandir-1.mp4', title: 'Lal Mandir — Darshan' },
-      { src: '/videos/lal-mandir-2.mp4', title: 'Lal Mandir — Heritage Walk' },
-    ],
+    // Previously referenced /videos/lal-mandir-1.mp4 and -2.mp4, but those
+    // files were never actually added to public/ — the <video> element was
+    // silently loading the SPA's index.html instead (Vercel's catch-all
+    // rewrite), not playable video. Empty until real footage is supplied.
+    videos: [],
   },
 
   // ── 2 ──────────────────────────────────────────────────────────
