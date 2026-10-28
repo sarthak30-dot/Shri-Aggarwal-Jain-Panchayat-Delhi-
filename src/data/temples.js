@@ -9,6 +9,8 @@ import imgNayaMandir2         from '../assets/temple_naya_mandir_2_web.jpg';
 import imgNayaMandir_carving  from '../assets/temple_naya_mandir_carving_web.jpg';
 import imgNayaMandir_interior from '../assets/temple_naya_mandir_interior_web.jpg';
 import imgNayaMandirDarshan   from '../assets/naya_mandir_darshan_web.jpg';
+import imgPanchayatiMandir        from '../assets/panchayati_mandir_real_web.jpg';
+import imgPanchayatiMandirDarshan from '../assets/panchayati_mandir_darshan_web.jpg';
 
 const galleryOf = (globResult) =>
   Object.keys(globResult).sort().map((key) => globResult[key]);
@@ -17,6 +19,7 @@ const lalMandirGallery  = galleryOf(import.meta.glob('../assets/gallery/lal-mand
 const badaMandirGallery = galleryOf(import.meta.glob('../assets/gallery/bada-mandir/*.jpg', { eager: true, import: 'default' }));
 const chotaMandirGallery = galleryOf(import.meta.glob('../assets/gallery/chota-mandir/*.jpg', { eager: true, import: 'default' }));
 const nayaMandirGallery = galleryOf(import.meta.glob('../assets/gallery/naya-mandir/*.jpg', { eager: true, import: 'default' }));
+const panchayatiMandirGallery = galleryOf(import.meta.glob('../assets/gallery/panchayati-mandir/*.jpg', { eager: true, import: 'default' }));
 
 export const temples = [
   // ── 1 ──────────────────────────────────────────────────────────
@@ -125,7 +128,9 @@ export const temples = [
     highlights: ['Seat of Panchayat governance', 'Listed — National Monuments Authority of India', 'Commands all 12 temples & institutions'],
     moolnayak: 'Lord Mahavira (24th Tirthankara)',
     featured: false,
-    image: imgNayaMandir2,
+    image: imgPanchayatiMandir,
+    detailHeroImage: imgPanchayatiMandirDarshan,
+    images: panchayatiMandirGallery,
     videos: [],
   },
 
