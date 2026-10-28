@@ -11,6 +11,8 @@ import imgNayaMandir_interior from '../assets/temple_naya_mandir_interior_web.jp
 import imgNayaMandirDarshan   from '../assets/naya_mandir_darshan_web.jpg';
 import imgPanchayatiMandir        from '../assets/panchayati_mandir_real_web.jpg';
 import imgPanchayatiMandirDarshan from '../assets/panchayati_mandir_darshan_web.jpg';
+import imgMeruMandir              from '../assets/meru_mandir_real_web.jpg';
+import imgMeruMandirDarshan       from '../assets/meru_mandir_darshan_web.jpg';
 
 const galleryOf = (globResult) =>
   Object.keys(globResult).sort().map((key) => globResult[key]);
@@ -20,6 +22,7 @@ const badaMandirGallery = galleryOf(import.meta.glob('../assets/gallery/bada-man
 const chotaMandirGallery = galleryOf(import.meta.glob('../assets/gallery/chota-mandir/*.jpg', { eager: true, import: 'default' }));
 const nayaMandirGallery = galleryOf(import.meta.glob('../assets/gallery/naya-mandir/*.jpg', { eager: true, import: 'default' }));
 const panchayatiMandirGallery = galleryOf(import.meta.glob('../assets/gallery/panchayati-mandir/*.jpg', { eager: true, import: 'default' }));
+const meruMandirGallery = galleryOf(import.meta.glob('../assets/gallery/meru-mandir/*.jpg', { eager: true, import: 'default' }));
 
 export const temples = [
   // ── 1 ──────────────────────────────────────────────────────────
@@ -138,15 +141,19 @@ export const temples = [
   {
     slug: 'meru-jain-mandir',
     name: 'Shree Digambar Jain Meru Mandir',
-    established: 'Historical',
+    established: '1845 CE',
     location: 'Old Delhi',
     lat: 28.65280, lng: 77.23230, // in the real Dharampura lane cluster (OSM neighbourhood-geocoded, near Naya Mandir) — exact building not individually addressed
     tagline: 'Named for the cosmic mountain.',
-    desc: "In Jain cosmology, Mount Meru is the axis of the universe — the mountain at the centre of all creation, around which the 14 realms revolve. A temple named Meru carries the weight of that cosmological significance. This mandir is one of the active Digambar Jain sanctuaries managed by the Agrawal Panchayat in Old Delhi.",
-    highlights: ['Named after Jain cosmological Mount Meru', 'Active Digambar Jain sanctuary', 'Under Agrawal Panchayat management'],
+    // Date and architectural details from the on-site INTACH Delhi Chapter /
+    // Municipal Corporation of Delhi / Delhi Tourism heritage plaque.
+    desc: "Built in 1845 by Lala Mehar Chand Jain, this two-storeyed temple is entered through a buff-coloured sandstone gateway. Its main shrine sits on the first floor, ringed by a forest of fluted marble columns, each crowned with its own miniature carved spire — a striking architectural signature rarely seen elsewhere in Old Delhi. The ceiling carries wall paintings depicting Nandishvara Dvipa, the 8th island-continent of Jain cosmology, evoking the same cosmic symbolism as Mount Meru itself, the axis of the universe around which the 14 realms revolve.",
+    highlights: ['Built 1845 CE by Lala Mehar Chand Jain', 'Forest of fluted marble pillar-shrines on the first floor', 'Ceiling paintings depict Nandishvara Dvipa'],
     moolnayak: 'Lord Parshvanatha (23rd Tirthankara)',
     featured: false,
-    image: imgNayaMandir_carving,
+    image: imgMeruMandir,
+    detailHeroImage: imgMeruMandirDarshan,
+    images: meruMandirGallery,
     videos: [],
   },
 

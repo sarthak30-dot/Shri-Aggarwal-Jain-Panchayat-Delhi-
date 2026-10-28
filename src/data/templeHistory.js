@@ -256,6 +256,40 @@ export const templeHistoryMap = {
     ],
   },
 
+  'meru-jain-mandir': {
+    name: 'Shri Digambar Jain Meru Mandir',
+    alternateNames: ['Meru Jain Mandir', 'Shri Digambar Jain Meruji Mandir'],
+    locality: 'Dharampura, Old Delhi',
+    city: 'Delhi-6',
+    eraEstablished: '1845 CE',
+    prominentFigures: [
+      'Lala Mehar Chand Jain (founder & patron, 1845)',
+    ],
+    moolnayakDeity: 'Lord Parshvanatha (23rd Tirthankara)',
+    architecturalHighlights: [
+      'Entered through a buff-coloured sandstone gateway with intricately painted wooden doors',
+      'Two-storeyed structure — the main shrine sits on the first floor, not the ground floor',
+      'First-floor shrine ringed by a forest of fluted marble columns, each crowned with its own miniature carved spire',
+    ],
+    historicalEvents: [
+      {
+        title: 'Built by Lala Mehar Chand Jain (1845 CE)',
+        period: '1845 CE',
+        description:
+          "Lala Mehar Chand Jain built the temple in 1845, in the Dharampura cluster where Old Delhi's Jain merchant and financier families had been settling since Shahjahanabad's earliest decades. Rather than a ground-floor sanctum, he raised the shrine to the first storey — reached through a carved sandstone gateway — and surrounded it with a dense colonnade of fluted marble pillars, each one topped with its own small carved spire, so the shrine itself appears to stand inside a stone forest.",
+      },
+      {
+        title: 'Nandishvara Dvipa on the Ceiling',
+        description:
+          "The temple takes its popular name, Meru Mandir, from the ceiling and wall paintings above the shrine, which depict Nandishvara Dvipa — the 8th island-continent of Jain cosmology, a realm of celebration where all heavenly beings are believed to gather for eternal festivity. The imagery evokes the same cosmic symbolism as Mount Meru itself, the mountain at the axis of the universe around which Jain cosmology's 14 realms revolve.",
+      },
+    ],
+    uniqueFeatures: [
+      'Shrine raised to the first floor rather than ground level — unusual among Old Delhi\'s Jain temples',
+      'Documented by an on-site INTACH Delhi Chapter / Municipal Corporation of Delhi / Delhi Tourism heritage plaque, and independently by Delhi heritage historian Rana Safvi',
+    ],
+  },
+
 };
 
 // Convenience lookup — returns null if no history exists for a given temple slug
