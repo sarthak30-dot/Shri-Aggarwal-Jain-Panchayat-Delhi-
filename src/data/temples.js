@@ -8,6 +8,7 @@ import imgNayaMandir          from '../assets/temple_naya_mandir_web.jpg';
 import imgNayaMandir2         from '../assets/temple_naya_mandir_2_web.jpg';
 import imgNayaMandir_carving  from '../assets/temple_naya_mandir_carving_web.jpg';
 import imgNayaMandir_interior from '../assets/temple_naya_mandir_interior_web.jpg';
+import imgNayaMandirDarshan   from '../assets/naya_mandir_darshan_web.jpg';
 
 const galleryOf = (globResult) =>
   Object.keys(globResult).sort().map((key) => globResult[key]);
@@ -15,6 +16,7 @@ const galleryOf = (globResult) =>
 const lalMandirGallery  = galleryOf(import.meta.glob('../assets/gallery/lal-mandir/*.jpg', { eager: true, import: 'default' }));
 const badaMandirGallery = galleryOf(import.meta.glob('../assets/gallery/bada-mandir/*.jpg', { eager: true, import: 'default' }));
 const chotaMandirGallery = galleryOf(import.meta.glob('../assets/gallery/chota-mandir/*.jpg', { eager: true, import: 'default' }));
+const nayaMandirGallery = galleryOf(import.meta.glob('../assets/gallery/naya-mandir/*.jpg', { eager: true, import: 'default' }));
 
 export const temples = [
   // ── 1 ──────────────────────────────────────────────────────────
@@ -105,8 +107,9 @@ export const temples = [
     moolnayak: 'Lord Adinatha (1st Tirthankara)',
     featured: true,
     image: '/temple-photos/naya-mandir-exterior.jpg',
-    detailHeroImage: '/temple-photos/naya-mandir-exterior.jpg',
+    detailHeroImage: imgNayaMandirDarshan,
     detailHeroPosition: 'center center',
+    images: nayaMandirGallery,
     videos: [],
   },
 
