@@ -5,7 +5,6 @@ import imgChotaMandirDarshan  from '../assets/chota_mandir_darshan_web.jpg';
 import imgBadaMandir          from '../assets/bada_mandir_real_web.jpg';
 import imgBadaMandirDarshan   from '../assets/bada_mandir_darshan_web.jpg';
 import imgNayaMandir          from '../assets/temple_naya_mandir_web.jpg';
-import imgNayaMandir2         from '../assets/temple_naya_mandir_2_web.jpg';
 import imgNayaMandir_carving  from '../assets/temple_naya_mandir_carving_web.jpg';
 import imgNayaMandir_interior from '../assets/temple_naya_mandir_interior_web.jpg';
 import imgNayaMandirDarshan   from '../assets/naya_mandir_darshan_web.jpg';
@@ -13,6 +12,8 @@ import imgPanchayatiMandir        from '../assets/panchayati_mandir_real_web.jpg
 import imgPanchayatiMandirDarshan from '../assets/panchayati_mandir_darshan_web.jpg';
 import imgMeruMandir              from '../assets/meru_mandir_real_web.jpg';
 import imgMeruMandirDarshan       from '../assets/meru_mandir_darshan_web.jpg';
+import imgRajaBazaarMandir        from '../assets/raja_bazaar_mandir_real_web.jpg';
+import imgRajaBazaarMandirDarshan from '../assets/raja_bazaar_mandir_darshan_web.jpg';
 
 const galleryOf = (globResult) =>
   Object.keys(globResult).sort().map((key) => globResult[key]);
@@ -23,6 +24,7 @@ const chotaMandirGallery = galleryOf(import.meta.glob('../assets/gallery/chota-m
 const nayaMandirGallery = galleryOf(import.meta.glob('../assets/gallery/naya-mandir/*.jpg', { eager: true, import: 'default' }));
 const panchayatiMandirGallery = galleryOf(import.meta.glob('../assets/gallery/panchayati-mandir/*.jpg', { eager: true, import: 'default' }));
 const meruMandirGallery = galleryOf(import.meta.glob('../assets/gallery/meru-mandir/*.jpg', { eager: true, import: 'default' }));
+const rajaBazaarMandirGallery = galleryOf(import.meta.glob('../assets/gallery/raja-bazaar-mandir/*.jpg', { eager: true, import: 'default' }));
 
 export const temples = [
   // ── 1 ──────────────────────────────────────────────────────────
@@ -183,9 +185,11 @@ export const temples = [
     tagline: 'Where Old Delhi meets New Delhi in faith.',
     desc: "Located near Shivaji Stadium and Connaught Place, this Agrawal Digambar Jain Mandir sits in Jaysinghpura — historically named after Raja Jai Singh II of Jaipur, who was granted land here by the Mughals. The temple marks the extension of the Agrawal Jain community beyond the walled city into the newer quarters of Delhi.",
     highlights: ['Near Shivaji Stadium, Connaught Place', 'Jain Mandir Marg — lane named after this temple', 'Community extension beyond Shahjahanabad'],
-    moolnayak: 'Lord Adinatha (1st Tirthankara)',
+    moolnayak: 'Lord Parshvanatha (23rd Tirthankara)',
     featured: false,
-    image: imgNayaMandir2,
+    image: imgRajaBazaarMandir,
+    detailHeroImage: imgRajaBazaarMandirDarshan,
+    images: rajaBazaarMandirGallery,
     videos: [],
   },
 
